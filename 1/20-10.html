@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Ngày 20/10 - Millo Thu 🩷</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+        .font-handwriting {
+            font-family: 'Dancing Script', cursive;
+        }
+        /* Canvas cánh hoa rơi nền */
+        #petal-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+        /* Hiệu ứng mờ ảo Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        /* Gradient nền */
+        .bg-gradient-soft {
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 35%, #e0e7ff 100%);
+        }
+        /* Hộp quà nảy nhẹ */
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.03); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 2.5s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-soft min-h-screen relative text-slate-800 overflow-x-hidden pb-16">
+
+    <!-- Canvas Cánh hoa rơi -->
+    <canvas id="petal-canvas"></canvas>
+
+    <!-- Nút Bật/Tắt Nhạc Dịu Nhẹ -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="music-toggle" onclick="toggleMusic()" class="flex items-center gap-2 bg-white/80 hover:bg-white text-pink-600 font-medium px-4 py-2 rounded-full shadow-lg backdrop-blur-md transition-all border border-pink-200">
+            <i id="music-icon" class="fa-solid fa-music animate-pulse"></i>
+            <span id="music-text" class="text-sm">Phát Giai Điệu Êm Dịu</span>
+            <div id="eq-container" class="hidden flex items-end gap-0.5 h-4 ml-1">
+                <span class="w-1 bg-pink-500 rounded-full animate-[bounce_1s_infinite_100ms] h-2"></span>
+                <span class="w-1 bg-pink-500 rounded-full animate-[bounce_1s_infinite_300ms] h-4"></span>
+                <span class="w-1 bg-pink-500 rounded-full animate-[bounce_1s_infinite_200ms] h-3"></span>
+            </div>
+        </button>
+    </div>
+
+    <!-- Container Chính -->
+    <main class="container mx-auto px-4 pt-12 max-w-3xl relative z-10">
+        
+        <!-- Header Chúc Mừng -->
+        <header class="text-center mb-10">
+            <span class="inline-block bg-pink-100 text-pink-700 text-xs font-semibold px-4 py-1.5 rounded-full mb-3 uppercase tracking-wider border border-pink-200 shadow-sm">
+                Special Event • 20 Tháng 10
+            </span>
+            <h1 class="text-3xl md:text-5xl font-extrabold text-pink-900 leading-tight mb-2">
+                Chúc Mừng Ngày 20/10 <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600 font-handwriting text-4xl md:text-6xl">Millo Thu 🩷</span>
+            </h1>
+            <p class="text-pink-700 text-base md:text-lg font-medium mt-2">
+                Gửi tới cậu những lời chúc tốt đẹp, rạng rỡ và hạnh phúc nhất! 🌸
+            </p>
+        </header>
+
+        <!-- Thẻ Thiệp Chúc Tương Tác -->
+        <section class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl mb-10 text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-300 via-purple-300 to-pink-400"></div>
+            
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-pink-100 text-pink-600 rounded-2xl mb-4 shadow-inner">
+                <i class="fa-solid fa-envelope-open-text text-2xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Bức Thư Gửi Millo Thu</h2>
+            <p class="text-slate-600 text-sm md:text-base mb-6 max-w-lg mx-auto">
+                Nhấn vào nút bên dưới để mở bức thư nhỏ ngọt ngào dành riêng cho cậu trong ngày hôm nay nhé!
+            </p>
+
+            <button onclick="openLetterModal()" class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold px-6 py-3 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                <i class="fa-solid fa-heart mr-2"></i> Mở Thư Chúc Mừng
+            </button>
+        </section>
+
+        <!-- Hộp Quà Bất Ngờ -->
+        <section class="text-center mb-12">
+            <div class="glass-card rounded-3xl p-8 shadow-xl relative">
+                <h3 class="text-xl font-bold text-pink-900 mb-2">Hộp Quà Đặc Biệt Cho Millo Thu</h3>
+                <p class="text-slate-600 text-sm mb-6">Bấm vào hộp quà để mở thông điệp tràn ngập yêu thương!</p>
+                
+                <div onclick="openGiftModal()" class="cursor-pointer inline-block animate-bounce-slow transform transition-transform hover:scale-105 active:scale-95">
+                    <div class="w-28 h-28 md:w-32 md:h-32 bg-gradient-to-br from-pink-400 to-rose-500 rounded-2xl shadow-xl flex items-center justify-center relative border-2 border-white/50">
+                        <i class="fa-solid fa-gift text-5xl md:text-6xl text-white"></i>
+                        <span class="absolute -top-2 -right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full shadow">Click!</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Danh sách Lời chúc ngắn tham khảo -->
+        <section class="glass-card rounded-3xl p-6 md:p-8 shadow-lg">
+            <h3 class="text-lg font-bold text-pink-900 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-sparkles text-pink-500"></i> Lời Chúc Tươi Vui & Ý Nghĩa
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white/80 p-4 rounded-2xl border border-pink-100 shadow-sm">
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        "Chúc Millo Thu ngày 20/10 luôn rạng rỡ, xinh đẹp, mọi dự định đều thành công và lúc nào cũng tràn đầy năng lượng tích cực!"
+                    </p>
+                </div>
+                <div class="bg-white/80 p-4 rounded-2xl border border-pink-100 shadow-sm">
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        "Cảm ơn cậu vì đã luôn mang lại những tiếng cười và năng lượng tuyệt vời. Chúc cậu ngày lễ nhận được thật nhiều hoa và quà nhé!"
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL THƯ CHÚC MỪNG -->
+    <div id="letter-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 shadow-2xl relative border border-pink-100 transform transition-all">
+            <button onclick="closeLetterModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center mb-4">
+                <span class="text-3xl">🌸</span>
+                <h3 class="text-xl font-bold text-pink-900">Gửi Millo Thu 🩷</h3>
+            </div>
+            <div class="text-slate-700 text-sm md:text-base leading-relaxed space-y-3 font-handwriting text-xl text-slate-800">
+                <p>Nhân ngày Phụ nữ Việt Nam 20/10, chúc cậu luôn giữ vững nụ cười tươi tắn và sự rạng rỡ trên môi!</p>
+                <p>Mong rằng mọi điều tốt đẹp nhất sẽ đến với cậu, mỗi ngày trôi qua đều tràn ngập niềm vui, may mắn và bình yên.</p>
+                <p>Hãy luôn tự tin, yêu thương bản thân và tỏa sáng theo cách tuyệt vời nhất của cậu nhé!</p>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="closeLetterModal()" class="bg-pink-500 text-white font-medium px-6 py-2 rounded-xl text-sm hover:bg-pink-600 transition-colors">
+                    Đóng Thư
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL HỘP QUÀ (~200 TỪ LỜI CHÚC) -->
+    <div id="gift-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 shadow-2xl relative border border-pink-100">
+            <button onclick="closeGiftModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="text-center mb-4">
+                <span class="inline-block p-3 bg-pink-100 rounded-full text-pink-600 mb-2">
+                    <i class="fa-solid fa-gift text-2xl"></i>
+                </span>
+                <h3 class="text-2xl font-bold text-pink-900">Món Quà Tinh Thần Dành Tặng Millo Thu</h3>
+            </div>
+
+            <div id="gift-text-content" class="bg-pink-50/60 p-5 rounded-2xl border border-pink-100 text-slate-700 text-sm md:text-base leading-relaxed space-y-3 max-h-80 overflow-y-auto">
+                <p>
+                    <strong>Gửi Millo Thu 🩷,</strong>
+                </p>
+                <p>
+                    Nhân dịp ngày 20/10 năm nay, tớ muốn gửi đến cậu những lời chúc chân thành và tốt đẹp nhất. Cảm ơn cậu vì đã luôn là một người bạn tuyệt vời, mang đến sự ấm áp và những năng lượng tích cực cho những người xung quanh.
+                </p>
+                <p>
+                    Chúc cậu trong ngày hôm nay và suốt 365 ngày trong năm luôn hạnh phúc, xinh đẹp và gặp nhiều may mắn trên con đường mình đã chọn. Mọi sự cố gắng và nỗ lực của cậu chắc chắn sẽ gặt hái được những thành quả rực rỡ xứng đáng.
+                </p>
+                <p>
+                    Hãy luôn giữ vững tinh thần lạc quan, yêu đời và tận hưởng một ngày 20/10 thật trọn vẹn, ngập tràn hoa và những nụ cười tươi trên môi nhé!
+                </p>
+                <p class="text-right font-semibold text-pink-800">
+                    — Happy Women's Day, Millo Thu! ✨
+                </p>
+            </div>
+
+            <div class="mt-6 flex gap-3 justify-center">
+                <button onclick="copyGiftText()" class="bg-pink-100 text-pink-700 hover:bg-pink-200 font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-copy"></i> Sao Chép Lời Chúc
+                </button>
+                <button onclick="closeGiftModal()" class="bg-pink-500 text-white hover:bg-pink-600 font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors">
+                    Hoàn Tất
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thông báo Toast khi Copy -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs md:text-sm px-4 py-2.5 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-50 flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-green-400"></i>
+        <span>Đã sao chép lời chúc vào khay nhớ tạm!</span>
+    </div>
+
+    <script>
+        // --- 1. NHẠC NỀN DỊU NHẸ (WEB AUDIO API) ---
+        let audioCtx = null;
+        let isPlaying = false;
+        let timerId = null;
+
+        const lofiChords = [
+            [261.63, 329.63, 392.00, 493.88], // Cmaj7
+            [220.00, 261.63, 329.63, 392.00], // Am7
+            [174.61, 220.00, 261.63, 349.23], // Fmaj7
+            [196.00, 246.94, 293.66, 392.00]  // G7
+        ];
+
+        function playSoftNote(freq, duration = 2.5, delay = 0) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                const filter = audioCtx.createBiquadFilter();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(1000, audioCtx.currentTime + delay);
+
+                gain.gain.setValueAtTime(0.001, audioCtx.currentTime + delay);
+                gain.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + delay + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + delay + duration);
+
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(audioCtx.currentTime + delay);
+                osc.stop(audioCtx.currentTime + delay + duration + 0.1);
+            } catch (e) {}
+        }
+
+        function startLofiMusic() {
+            let chordIdx = 0;
+            function playSequence() {
+                const chord = lofiChords[chordIdx % lofiChords.length];
+                chord.forEach((note, i) => {
+                    playSoftNote(note, 2.8, i * 0.4);
+                });
+                chordIdx++;
+            }
+            playSequence();
+            timerId = setInterval(playSequence, 3200);
+        }
+
+        function toggleMusic() {
+            const btnText = document.getElementById('music-text');
+            const eq = document.getElementById('eq-container');
+
+            if (!isPlaying) {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                startLofiMusic();
+                isPlaying = true;
+                btnText.textContent = "Đang Phát Giai Điệu";
+                eq.classList.remove('hidden');
+            } else {
+                if (timerId) clearInterval(timerId);
+                isPlaying = false;
+                btnText.textContent = "Phát Giai Điệu Êm Dịu";
+                eq.classList.add('hidden');
+            }
+        }
+
+        // --- 2. HỘP QUÀ & MODAL ---
+        function openGiftModal() {
+            document.getElementById('gift-modal').classList.remove('hidden');
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 90,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#f472b6', '#fb7185', '#c084fc', '#fef08a']
+                });
+            }
+        }
+
+        function closeGiftModal() {
+            document.getElementById('gift-modal').classList.add('hidden');
+        }
+
+        function openLetterModal() {
+            document.getElementById('letter-modal').classList.remove('hidden');
+        }
+
+        function closeLetterModal() {
+            document.getElementById('letter-modal').classList.add('hidden');
+        }
+
+        function copyGiftText() {
+            const text = document.getElementById('gift-text-content').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.remove('opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('opacity-0');
+                }, 2500);
+            });
+        }
+
+        // --- 3. CANVAS CÁNH HOA RƠI ---
+        const canvas = document.getElementById('petal-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const petals = Array.from({ length: 28 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 8 + 6,
+            speedY: Math.random() * 1.2 + 0.6,
+            speedX: Math.random() * 0.6 - 0.3,
+            opacity: Math.random() * 0.5 + 0.4,
+            rotation: Math.random() * 360
+        }));
+
+        function drawPetals() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            petals.forEach(p => {
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate((p.rotation * Math.PI) / 180);
+                ctx.fillStyle = `rgba(244, 114, 182, ${p.opacity})`;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, p.size, p.size / 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.rotation += 0.5;
+
+                if (p.y > canvas.height + 20) {
+                    p.y = -10;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(drawPetals);
+        }
+        drawPetals();
+    </script>
+</body>
+</html>
+                                               
