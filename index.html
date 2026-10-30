@@ -1,182 +1,441 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Không Gian Ngày Lễ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.2) 0%, transparent 40%),
-                        radial-gradient(circle at 90% 80%, rgba(192, 132, 252, 0.2) 0%, transparent 40%),
-                        linear-gradient(135deg, #070b14 0%, #0d1527 50%, #172554 100%);
-            min-height: 100vh; display: flex; justify-content: center;
-            align-items: center; color: #ffffff; padding: 20px;
-            position: relative; overflow-x: hidden;
-        }
-        
-        body::before {
-            content: '';
-            position: absolute;
-            width: 300px; height: 300px;
-            background: rgba(56, 189, 248, 0.15);
-            filter: blur(80px);
-            top: 10%; left: 10%;
-            z-index: 0; pointer-events: none;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mừng Ngày 19/11 - Đỗ Tuấn Anh & Ly Thị Chấu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary: #ff4e50;
+      --secondary: #f9d423;
+      --accent: #ff2a6d;
+      --bg-dark: #05030a;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+      --text-gold: linear-gradient(135deg, #ffe066 0%, #f9d423 50%, #ff8c00 100%);
+    }
 
-        .dashboard {
-            background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px); border-radius: 30px;
-            border: 1px solid rgba(56, 189, 248, 0.3); padding: 50px 40px;
-            width: 100%; max-width: 950px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(56, 189, 248, 0.08);
-            position: relative; z-index: 1;
-        }
-        .header { text-align: center; margin-bottom: 45px; }
-        .header h1 { 
-            font-size: 3rem; font-weight: 700; margin-bottom: 12px; 
-            text-shadow: 0 2px 15px rgba(56,189,248,0.4); 
-            background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-        }
-        .header p { font-size: 1.1rem; font-weight: 400; color: rgba(224, 242, 254, 0.85); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 24px; }
-        
-        .card {
-            background: linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%); 
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 24px; padding: 40px 20px; text-align: center; text-decoration: none;
-            color: #ffffff; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            display: flex; flex-direction: column; align-items: center; 
-            position: relative; overflow: hidden; cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-        .card:hover {
-            transform: translateY(-10px); 
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(192, 132, 252, 0.25) 100%);
-            border-color: rgba(56, 189, 248, 0.8); 
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(56,189,248,0.5);
-        }
-        .icon { font-size: 4rem; margin-bottom: 20px; transition: transform 0.4s ease; filter: drop-shadow(0 6px 10px rgba(56,189,248,0.5)); }
-        .card:hover .icon { transform: scale(1.2) rotate(5deg); }
-        
-        .title { 
-            font-size: 1.4rem; 
-            font-weight: 700; 
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            color: #f0f9ff;
-        }
-        
-        #loading { text-align: center; font-size: 1.2rem; width: 100%; grid-column: 1 / -1; color: rgba(224, 242, 254, 0.8); }
-        .error { color: #f87171; text-align: center; width: 100%; grid-column: 1 / -1; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px); display: flex;
-            justify-content: center; align-items: center; z-index: 1000;
-            opacity: 0; visibility: hidden; transition: all 0.4s ease;
-        }
-        .overlay.active { opacity: 1; visibility: visible; }
-        .modal {
-            background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(56, 189, 248, 0.4);
-            padding: 45px 55px; border-radius: 25px; text-align: center;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 30px rgba(56,189,248,0.2);
-        }
-        .spinner {
-            border: 4px solid rgba(56,189,248,0.1); border-top: 4px solid #38bdf8;
-            border-right: 4px solid #c084fc;
-            border-radius: 50%; width: 55px; height: 55px;
-            animation: spin 1s linear infinite; margin: 0 auto 20px auto;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .modal p { font-size: 1.3rem; font-weight: 600; letter-spacing: 1px; color: #e0f2fe; }
-    </style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg-dark);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Hiệu ứng nền tối lãng mạn giống mẫu TikTok */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: radial-gradient(circle at center, #1a0b2e 0%, #090413 70%, #000000 100%);
+    }
+
+    /* Canvas chứa pháo hoa trái tim phía trên và vòng xoáy chữ phía dưới */
+    #tiktok-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 20px 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 35px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Thẻ kính Glassmorphism */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      box-shadow: var(--glass-shadow);
+      padding: 30px;
+      width: 100%;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(255, 78, 80, 0.4);
+      box-shadow: 0 12px 40px 0 rgba(255, 42, 109, 0.2);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ffd700;
+      margin-bottom: 12px;
+    }
+
+    .main-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      background: var(--text-gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .couple-names {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      color: #ff758c;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .couple-names i {
+      color: #ff2a6d;
+      animation: heartBeat 1.2s infinite ease-in-out;
+    }
+
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.3); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.3); }
+      70% { transform: scale(1); }
+    }
+
+    /* Bức thư tình */
+    .letter-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #ff758c;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .typewriter-text {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.4rem;
+      line-height: 1.8;
+      color: #fce4ec;
+      min-height: 140px;
+      white-space: pre-line;
+      text-align: left;
+      padding: 0 10px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      background-color: #ff758c;
+      animation: blink 1s infinite;
+      margin-left: 2px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Nút chuyển sang mẫu Trái tim 3D */
+    .btn-3d-heart {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #ff4e50, #ff2a6d);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(255, 42, 109, 0.4);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-3d-heart:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 30px rgba(255, 42, 109, 0.6);
+    }
+
+    /* Thanh điều khiển nhạc & pháo hoa phụ */
+    .controls-bar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    .btn-floating {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff4e50, #f9d423);
+      border: none;
+      color: #fff;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 15px rgba(255, 78, 80, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .btn-floating:hover {
+      transform: scale(1.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 0.8rem;
+      color: #888;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    footer span {
+      color: #ff4e50;
+    }
+  </style>
 </head>
 <body>
-    <div class="dashboard">
-        <div class="header">
-            <h1>Trang Chủ Ngày Lễ</h1>
-            <p>Tự động cập nhật tài liệu từ thư mục <strong>0</strong>!</p>
-        </div>
-        <div class="grid" id="file-grid">
-            <div id="loading">⏳ Đang quét thư mục 0...</div>
-        </div>
-    </div>
 
-    <div id="overlay" class="overlay">
-        <div class="modal">
-            <div class="spinner"></div>
-            <p>[ Đang kiểm tra thông tin... ]</p>
-        </div>
-    </div>
+  <div class="bg-animation"></div>
+  <!-- Canvas vẽ pháo hoa trái tim & vòng xoáy chữ giống mẫu TikTok -->
+  <canvas id="tiktok-canvas"></canvas>
 
-    <script>
-        const githubUsername = 'anhsung986';
-        const repoName = 'ngayle';
-        const folderPath = '0';
+  <div class="container">
+    
+    <!-- Tiêu đề -->
+    <header class="header glass-card">
+      <div class="badge">International Men's Day - 19/11</div>
+      <h1 class="main-title">Mừng Ngày Của Chồng Yêu</h1>
+      <div class="couple-names">
+        <span>ĐỖ TUẤN ANH</span>
+        <i class="fa-solid fa-heart"></i>
+        <span>LY THỊ CHẤU</span>
+      </div>
+    </header>
 
-        const apiURL = `https://api.github.com/repos/${githubUsername}/${repoName}/contents/${folderPath}`;
+    <!-- Bức thư tình chạy chữ -->
+    <section class="glass-card">
+      <h3 class="letter-title"><i class="fa-solid fa-envelope-open-text"></i> Gửi Chồng Đỗ Tuấn Anh</h3>
+      <div class="typewriter-text"><span id="typewriter"></span><span class="cursor"></span></div>
+    </section>
 
-        async function fetchGitHubFiles() {
-            const grid = document.getElementById('file-grid');
-            
-            try {
-                const response = await fetch(apiURL);
-                if (!response.ok) throw new Error('Thư mục "0" chưa tồn tại hoặc rỗng');
-                
-                const files = await response.json();
-                grid.innerHTML = ''; 
-                
-                if(!Array.isArray(files) || files.length === 0) {
-                    grid.innerHTML = '<div style="text-align:center; width:100%; color:rgba(224,242,254,0.7);">Thư mục 0 hiện đang trống.</div>';
-                    return;
-                }
-                
-                files.forEach(file => {
-                    let icon = '📄'; 
-                    const fileNameLower = file.name.toLowerCase();
-                    
-                    if (file.type === 'dir') icon = '📁';
-                    else if(fileNameLower.endsWith('.jpg') || fileNameLower.endsWith('.png') || fileNameLower.endsWith('.gif')) icon = '🖼️';
-                    else if(fileNameLower.endsWith('.pdf')) icon = '📕';
-                    else if(fileNameLower.endsWith('.xlsx') || fileNameLower.endsWith('.csv')) icon = '📊';
-                    else if(fileNameLower.endsWith('.mp4')) icon = '🎬';
-                    else if(fileNameLower.endsWith('.html')) icon = '🌐';
-                    
-                    const displayName = file.name.replace(/\.[^/.]+$/, "").toUpperCase();
-                    
-                    const card = `
-                        <a onclick="handleFileClick('${file.name}')" class="card">
-                            <span class="icon">${icon}</span>
-                            <span class="title">${displayName}</span>
-                        </a>
-                    `;
-                    grid.innerHTML += card;
-                });
-            } catch (error) {
-                grid.innerHTML = `<div class="error">Lỗi: ${error.message}.</div>`;
-            }
-        }
+    <!-- Nút sang trang Trái tim 3D CSS -->
+    <section class="glass-card" style="padding: 25px;">
+      <p style="color: #ccc; font-size: 0.95rem; margin-bottom: 15px;">Khám phá không gian trái tim 3D lồng ghép tên hai đứa mình</p>
+      <a href="ilove.html" class="btn-3d-heart">
+        <i class="fa-solid fa-heart"></i> Xem Hiệu Ứng Trái Tim 3D
+      </a>
+    </section>
 
-        function handleFileClick(fileName) {
-            const overlay = document.getElementById('overlay');
-            
-            const cleanName = fileName.replace(/\.[^/.]+$/, "");
-            const targetUrl = `https://wow.ngay-le.site.je/0/${cleanName}`;
-            
-            overlay.classList.add('active');
-            
-            setTimeout(() => {
-                window.location.href = targetUrl;
-            }, 1500); 
-        }
+    <footer>
+      Thiết kế dành riêng cho <strong>Đỗ Tuấn Anh</strong> & <strong>Ly Thị Chấu</strong> <span><i class="fa-solid fa-heart"></i></span> 19/11
+    </footer>
 
-        fetchGitHubFiles();
-    </script>
+  </div>
+
+  <!-- Nút điều khiển nhạc & pháo hoa -->
+  <div class="controls-bar">
+    <button class="btn-floating" id="musicBtn" title="Bật/Tắt Nhạc"><i class="fa-solid fa-music"></i></button>
+  </div>
+
+  <audio id="bgMusic" loop preload="auto">
+    <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-688.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    // --- MÔ PHỎNG HIỆU ỨNG TIKTOK: TRÁI TIM PHÁO HOA + VÒNG XOÁY CHỮ ---
+    const canvas = document.getElementById('tiktok-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Tạo tập hợp các hạt pháo hoa hình trái tim ở nửa trên màn hình
+    const heartParticles = [];
+    const textParticles = [];
+    
+    // Mảng chữ bay trong vòng xoáy giống mẫu TikTok
+    const words = [
+      "ĐỖ TUẤN ANH ❤️ LY THỊ CHẤU", "19/11", "Chồng yêu", "Quốc tế đàn ông", 
+      "Em yêu chồng", "Mãi bên nhau", "Love you", "Happy Men's Day", "Cám ơn chồng"
+    ];
+
+    // Khởi tạo hạt trái tim pháo hoa ở trên
+    for (let i = 0; i < 400; i++) {
+      // Công thức tạo hình trái tim toán học
+      const t = Math.random() * Math.PI * 2;
+      const x = 16 * Math.pow(Math.sin(t), 3);
+      const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+      
+      heartParticles.push({
+        ox: x * 12,
+        oy: y * 12,
+        x: 0,
+        y: 0,
+        size: Math.random() * 2 + 1,
+        color: `hsl(${Math.random() * 40 + 330}, 100%, ${Math.random() * 30 + 60}%)`,
+        angle: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.02 + 0.01
+      });
+    }
+
+    // Khởi tạo các từ ngữ xoay vòng ở nửa dưới (hiệu ứng vòng xoáy không gian)
+    for (let i = 0; i < 35; i++) {
+      textParticles.push({
+        text: words[Math.floor(Math.random() * words.length)],
+        radiusX: Math.random() * 220 + 60,
+        radiusY: Math.random() * 70 + 20,
+        angle: Math.random() * Math.PI * 2,
+        speed: (Math.random() - 0.5) * 0.015,
+        yOffset: Math.random() * 150 + 120, // Nằm ở nửa dưới màn hình
+        fontSize: Math.random() * 6 + 11,
+        alpha: Math.random() * 0.6 + 0.4
+      });
+    }
+
+    let time = 0;
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      time += 0.03;
+
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2 - 100; // Đẩy trái tim lên cao một chút
+
+      // 1. Vẽ pháo hoa trái tim phía trên
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      
+      // Hiệu ứng phồng xẹp nhẹ cho trái tim
+      const scalePulse = 1 + Math.sin(time * 2) * 0.04;
+      ctx.scale(scalePulse, scalePulse);
+
+      heartParticles.forEach(p => {
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.ox, p.oy, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.restore();
+
+      // 2. Vẽ vòng xoáy chữ ở phía dưới giống mẫu TikTok
+      const vortexCenterY = canvas.height / 2 + 120;
+      textParticles.forEach(tp => {
+        tp.angle += tp.speed;
+        
+        // Tính toán tọa độ xoay 3D giả lập hình elip xoáy
+        const x = centerX + Math.cos(tp.angle) * tp.radiusX;
+        const y = vortexCenterY + Math.sin(tp.angle) * tp.radiusY + (Math.sin(time + tp.angle) * 10);
+        
+        // Độ đậm nhạt theo chiều sâu gần xa
+        const depthAlpha = tp.alpha * (0.5 + 0.5 * Math.sin(tp.angle));
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0.15, depthAlpha);
+        ctx.font = `${tp.fontSize}px Montserrat, sans-serif`;
+        ctx.fillStyle = '#ffb6c1';
+        ctx.shadowColor = '#ff2a6d';
+        ctx.shadowBlur = 8;
+        ctx.textAlign = 'center';
+        ctx.fillText(tp.text, x, y);
+        ctx.restore();
+      });
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // --- Hiệu ứng gõ chữ bức thư ---
+    const textToType = `Chồng yêu Đỗ Tuấn Anh à,\n\nNgày Quốc tế Nam giới 19/11 này, vợ - Lý Thị Chấu - muốn gửi đến chồng tất cả sự yêu thương và biết ơn sâu sắc nhất.\nCảm ơn chồng vì luôn là chỗ dựa vững chắc, luôn cưng chiều và bảo vệ vợ.\nChúc chồng yêu luôn mạnh khỏe, gặt hái thật nhiều thành công và mãi là bờ vai ấm áp của cuộc đời vợ nhé! ❤️`;
+
+    let typeIndex = 0;
+    const typewriterElem = document.getElementById('typewriter');
+
+    function typeWriter() {
+      if (typeIndex < textToType.length) {
+        typewriterElem.textContent += textToType.charAt(typeIndex);
+        typeIndex++;
+        setTimeout(typeWriter, 35);
+      }
+    }
+    setTimeout(typeWriter, 800);
+
+    // --- Điều khiển âm thanh ---
+    const musicBtn = document.getElementById('musicBtn');
+    const bgMusic = document.getElementById('bgMusic');
+    let isPlaying = false;
+
+    musicBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        bgMusic.pause();
+        musicBtn.innerHTML = '<i class="fa-solid fa-music"></i>';
+      } else {
+        bgMusic.play().then(() => {
+          musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        }).catch(err => console.log("Audio play error:", err));
+      }
+      isPlaying = !isPlaying;
+    });
+
+    document.body.addEventListener('click', () => {
+      if (!isPlaying) {
+        bgMusic.play().then(() => {
+          isPlaying = true;
+          musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        }).catch(() => {});
+      }
+    }, { once: true });
+  </script>
 </body>
 </html>
-  
