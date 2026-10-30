@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lời Chúc 19/11 - Đỗ Tuấn Anh & Ly Thị Chấu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      overflow-y: auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 15px;
+    }
+
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .content-container {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      padding: 40px 35px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 25px;
+      box-shadow: 0 15px 35px rgba(255, 42, 109, 0.3);
+      text-align: center;
+      animation: fadeIn 1.2s ease;
+    }
+
+    .main-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2.2rem, 4.5vw, 3rem);
+      color: #ffffff;
+      text-shadow: 0 0 25px #ff2a6d, 0 0 10px #ff758c;
+      margin-bottom: 20px;
+    }
+
+    .wish-paragraph {
+      font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+      line-height: 1.9;
+      color: #fce4ec;
+      text-align: justify;
+      text-justify: inter-word;
+      margin-bottom: 30px;
+      text-shadow: 0 0 8px rgba(255, 42, 109, 0.4);
+    }
+
+    .wish-paragraph strong {
+      color: #ffd700;
+    }
+
+    .btn-back {
+      padding: 12px 32px;
+      border-radius: 30px;
+      background: rgba(255, 42, 109, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 5px 20px rgba(255, 42, 109, 0.4);
+    }
+
+    .btn-back:hover {
+      background: rgba(255, 42, 109, 0.7);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(255, 42, 109, 0.7);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="content-container">
+    <h1 class="main-title">ĐỖ TUẤN ANH ❤️ LY THỊ CHẤU</h1>
+    <p class="wish-paragraph">
+      Nhân ngày Quốc tế Nam giới <strong>19/11</strong>, từ tận đáy lòng mình, em - <strong>Ly Thị Chấu</strong> muốn gửi gắm tất cả những tâm tư, yêu thương và lòng biết ơn chân thành nhất đến người yêu của em - anh <strong>Đỗ Tuấn Anh</strong>. Cảm ơn anh vì giữa dòng đời tấp nập, anh đã bước đến, luôn kiên nhẫn, cưng chiều, che chở và mang lại cho em những bình yên trọn vẹn nhất. 
+      <br><br>
+      Anh là một chàng trai tuyệt vời, luôn mạnh mẽ và luôn đặt em vào trái tim anh. Chúc người yêu của em ngày 19/11 thật nhiều niềm vui, luôn tràn đầy sức khỏe, luôn giữ vững ngọn lửa đam mê để gặt hái thật nhiều thành công rực rỡ trên con đường tương lai. Dù ngoài kia cuộc sống có bao nhiêu bộn bề, mệt mỏi hay thử thách, hãy luôn nhớ rằng ở phía sau luôn có em ở đây, sẵn sàng lắng nghe và đồng hành cùng anh. 
+      <br><br>
+      Mong rằng chúng ta sẽ mãi giữ được ngọn lửa tình yêu này, nắm chặt tay nhau vượt qua năm tháng để cùng nhau viết tiếp câu chuyện tình yêu thật hạnh phúc. Yêu và thương anh rất nhiều! ❤️
+    </p>
+    <a href="index.html" class="btn-back">
+      <i class="fa-solid fa-arrow-left"></i> Quay lại trang chính
+    </a>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const stars = [];
+    for (let i = 0; i < 70; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 0.5,
+        alpha: Math.random() * 0.7 + 0.3
+      });
+    }
+
+    function render() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      stars.forEach(s => {
+        s.alpha += (Math.random() - 0.5) * 0.05;
+        if (s.alpha < 0.2) s.alpha = 0.2;
+        if (s.alpha > 0.9) s.alpha = 0.9;
+
+        ctx.save();
+        ctx.globalAlpha = s.alpha;
+        ctx.fillStyle = '#ffb6c1';
+        ctx.shadowColor = '#ff2a6d';
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      requestAnimationFrame(render);
+    }
+
+    render();
+  </script>
+</body>
+</html>
