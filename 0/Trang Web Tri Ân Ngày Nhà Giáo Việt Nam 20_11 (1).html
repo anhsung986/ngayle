@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tri Ân Thầy Cô - Ngày Nhà Giáo Việt Nam 20/11</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Pure CSS Styling -->
+    <style>
+        /* ==========================================
+           1. CSS Variables & Reset
+           ========================================== */
+        :root {
+            --color-bg-dark: #1a0303;
+            --color-bg-via: #3a0808;
+            --color-brand-red: #8B0000;
+            --color-brand-crimson: #B22222;
+            --color-brand-gold: #D4AF37;
+            --color-light-gold: #F3E5AB;
+            --color-cream: #FFFDD0;
+            --color-card-border: rgba(212, 175, 55, 0.3);
+            
+            --font-sans: 'Montserrat', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --font-cursive: 'Dancing Script', cursive;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(to bottom, var(--color-bg-dark), var(--color-bg-via), var(--color-bg-dark));
+            color: #f3f4f6;
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2b0808;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-brand-gold);
+            border-radius: 4px;
+        }
+
+        /* ==========================================
+           2. Canvas & Fixed Floating Controls
+           ========================================== */
+        #petal-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .audio-control-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .audio-player-wrapper {
+            width: 260px;
+            height: 150px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+            border: 2px solid var(--color-brand-gold);
+            background: #000;
+            transition: all 0.4s ease;
+            display: none;
+        }
+
+        .audio-player-wrapper.active {
+            display: block;
+        }
+
+        .audio-player-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .btn-audio {
+            background-color: var(--color-brand-gold);
+            color: var(--color-brand-red);
+            border: 2px solid #fef08a;
+            border-radius: 50px;
+            padding: 12px 20px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+        .btn-audio:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
+        }
+        
+        .disc-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        
+        .disc-spinning {
+            animation: spinDisc 3s linear infinite;
+        }
+
+        @keyframes spinDisc {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notice Popup for Music */
+        .music-tip {
+            background: rgba(26, 3, 3, 0.95);
+            border: 1px solid var(--color-brand-gold);
+            color: #fef08a;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            animation: bounceTip 2s infinite;
+        }
+
+        @keyframes bounceTip {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* ==========================================
+           3. Layout Container & Sections
+           ========================================== */
+        .container {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-padding {
+            padding: 70px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            color: var(--color-brand-gold);
+            margin-bottom: 10px;
+        }
+        .section-subtitle {
+            color: #d1d5db;
+            font-size: 1rem;
+        }
+        .divider-gold {
+            height: 4px;
+            width: 80px;
+            background-color: var(--color-brand-gold);
+            margin: 12px auto 0 auto;
+            border-radius: 2px;
+            opacity: 0.8;
+        }
+
+        /* Glassmorphism Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--color-card-border);
+            border-radius: 16px;
+        }
+
+        /* Buttons */
+        .btn-gold {
+            background: linear-gradient(135deg, var(--color-brand-gold), #eab308, #d97706);
+            color: var(--color-brand-red);
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(217, 119, 6, 0.5);
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            color: var(--color-brand-gold);
+            font-weight: 500;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        .btn-outline:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        /* ==========================================
+           4. Navigation Bar
+           ========================================== */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background-color: rgba(26, 3, 3, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 14px 0;
+        }
+        .navbar-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            color: var(--color-brand-gold);
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: #f3f4f6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: var(--color-brand-gold);
+        }
+
+        /* ==========================================
+           5. Hero Section
+           ========================================== */
+        .hero-section {
+            position: relative;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .hero-content {
+            max-width: 850px;
+            z-index: 10;
+            animation: floatAnim 4s ease-in-out infinite;
+        }
+        @keyframes floatAnim {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1deg); }
+        }
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 50px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--color-brand-gold);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fef9c3, var(--color-brand-gold), #fde047);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-quote {
+            font-family: var(--font-cursive);
+            font-size: 1.4rem;
+            color: #fef08a;
+            opacity: 0.95;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+        .hero-btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* ==========================================
+           6. Meaning Cards Section
+           ========================================== */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .meaning-card {
+            padding: 30px;
+            border-radius: 16px;
+            transition: border-color 0.3s ease;
+        }
+        .meaning-card:hover {
+            border-color: rgba(212, 175, 55, 0.6);
+        }
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brand-gold);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        .meaning-title {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: #fef08a;
+            margin-bottom: 10px;
+        }
+        .meaning-desc {
+            color: #d1d5db;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* ==========================================
+           7. Wish Wall Section (Pure Wishes, Grid)
+           ========================================== */
+        .wish-wall-bg {
+            background-color: rgba(0, 0, 0, 0.4);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .wish-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .wish-card {
+            padding: 24px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(40, 5, 5, 0.85), rgba(10, 2, 2, 0.95));
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .wish-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-brand-gold);
+        }
+        .wish-quote-icon {
+            color: rgba(212, 175, 55, 0.4);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .wish-text {
+            font-family: var(--font-serif);
+            font-size: 0.95rem;
+            font-style: italic;
+            color: #f3f4f6;
+            margin-bottom: 20px;
+            line-height: 1.65;
+        }
+        .wish-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: rgba(212, 175, 55, 0.8);
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .wish-footer-tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .heart-icon {
+            color: #ef4444;
+            animation: pulseAnim 1.5s infinite;
+        }
+        @keyframes pulseAnim {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* ==========================================
+           8. 3D Interactive Flip Cards Section
+           ========================================== */
+        .perspective-1000 {
+            perspective: 1000px;
+            height: 320px;
+            cursor: pointer;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+        .card-front {
+            border: 1px solid rgba(212, 175, 55, 0.4);
+        }
+        .card-front-1 {
+            background: linear-gradient(135deg, #7f1d1d, #8b0000, #000);
+        }
+        .card-front-2 {
+            background: linear-gradient(135deg, #78350f, #451a03, #000);
+        }
+        .card-front-3 {
+            background: linear-gradient(135deg, #064e3b, #042f2e, #000);
+        }
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--color-brand-gold);
+            margin-top: 15px;
+        }
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            color: #fef08a;
+        }
+        .card-hint {
+            font-size: 0.75rem;
+            color: rgba(212, 175, 55, 0.8);
+            font-style: italic;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #1c0505, #000);
+            border: 2px solid var(--color-brand-gold);
+            justify-content: center;
+            gap: 12px;
+        }
+        .card-back-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--color-brand-gold);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .card-back-text {
+            font-family: var(--font-cursive);
+            font-size: 1.15rem;
+            color: #e5e7eb;
+            line-height: 1.6;
+        }
+
+        /* ==========================================
+           9. Poem Section (No Images)
+           ========================================== */
+        .poem-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .poem-panel {
+            padding: 50px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .poem-watermark {
+            position: absolute;
+            font-size: 12rem;
+            color: rgba(212, 175, 55, 0.05);
+            pointer-events: none;
+        }
+        .poem-watermark-right { right: -30px; bottom: -30px; }
+        .poem-watermark-left { left: -30px; top: -30px; }
+        
+        .poem-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            color: var(--color-brand-gold);
+            margin-bottom: 24px;
+        }
+        .poem-body {
+            font-family: var(--font-cursive);
+            font-size: 1.4rem;
+            color: rgba(254, 240, 138, 0.95);
+            line-height: 1.9;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ==========================================
+           10. Footer
+           ========================================== */
+        .footer {
+            background-color: rgba(0, 0, 0, 0.9);
+            text-align: center;
+            padding: 35px 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+        .footer-title {
+            font-family: var(--font-serif);
+            color: var(--color-brand-gold);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        /* ==========================================
+           11. Responsive Media Queries
+           ========================================== */
+        @media (max-width: 992px) {
+            .grid-3, .wish-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero-title {
+                font-size: 2.3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* Hide top links on mobile for simplicity */
+            }
+            .grid-3, .wish-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-title {
+                font-size: 1.9rem;
+            }
+            .hero-quote {
+                font-size: 1.15rem;
+            }
+            .section-title {
+                font-size: 1.75rem;
+            }
+            .poem-body {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Petal Canvas Animation Layer -->
+    <canvas id="petal-canvas"></canvas>
+
+    <!-- Audio Player Controls -->
+    <div class="audio-control-container">
+        <div id="music-tip" class="music-tip">
+            <i class="fas fa-hand-point-down"></i> Bấm để bật Nhạc 20/11
+        </div>
+        <div id="player-wrapper" class="audio-player-wrapper">
+            <iframe id="yt-iframe" 
+                src="https://www.youtube.com/embed/Zm3dj0SKgfo?enablejsapi=1&autoplay=0&rel=0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
+        </div>
+        <button id="audio-toggle" class="btn-audio" title="Bật/Tắt Trình Phát Nhạc">
+            <i id="audio-disc" class="fas fa-compact-disc disc-icon"></i>
+            <span id="audio-text">Bật Nhạc Tri Ân</span>
+        </button>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container navbar-flex">
+            <a href="#hero" class="nav-logo">
+                <i class="fas fa-graduation-cap"></i> 20/11 Tri Ân
+            </a>
+            <ul class="nav-links">
+                <li><a href="#hero">Trang Chủ</a></li>
+                <li><a href="#meaning">Ý Nghĩa</a></li>
+                <li><a href="#wish-wall">Lời Tri Ân</a></li>
+                <li><a href="#cards">Thiệp 3D</a></li>
+                <li><a href="#memories">Bài Thơ</a></li>
+            </ul>
+            <a href="#wish-wall" onclick="triggerConfetti()" class="btn-gold" style="padding: 8px 20px; font-size: 0.85rem;">
+                <i class="fas fa-heart"></i> Đón Nhận Tri Ân
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <div class="hero-badge">
+                Chào mừng Ngày Nhà Giáo Việt Nam 20/11
+            </div>
+            <h1 class="hero-title">
+                Tôn Vinh Người Gieo Hạt Mầm Tri Thức
+            </h1>
+            <p class="hero-quote">
+                "Có một nghề bụi phấn bám đầy tay - Người ta bảo đó là nghề sạch nhất.<br>Có một nghề không trồng cây vào đất - Mà cho đời những đóa hoa thơm."
+            </p>
+            <div class="hero-btn-group">
+                <a href="#wish-wall" onclick="triggerConfetti()" class="btn-gold">
+                    <i class="fas fa-heart"></i> Xem Lời Tri Ân
+                </a>
+                <a href="#cards" class="btn-outline">
+                    <i class="fas fa-envelope-open-text"></i> Xem Thiệp 3D
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meaning Section -->
+    <section id="meaning" class="section-padding container">
+        <div class="section-header">
+            <h2 class="section-title">Tri Ân & Sứ Mệnh</h2>
+            <div class="divider-gold"></div>
+        </div>
+        
+        <div class="grid-3">
+            <div class="glass-panel meaning-card">
+                <div class="icon-box">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3 class="meaning-title">Người Truyền Tri Thức</h3>
+                <p class="meaning-desc">
+                    Thầy cô là người mở ra cánh cửa tri thức, dìu dắt bao thế hệ học sinh bước qua từng bến bờ của kiến thức và ước mơ.
+                </p>
+            </div>
+
+            <div class="glass-panel meaning-card">
+                <div class="icon-box">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <h3 class="meaning-title">Kim Chỉ Nam Cuộc Đời</h3>
+                <p class="meaning-desc">
+                    Không chỉ dạy chữ, thầy cô còn rèn tính, uốn nắn nhân cách, gieo những hạt mầm yêu thương và lý tưởng sống cao đẹp.
+                </p>
+            </div>
+
+            <div class="glass-panel meaning-card">
+                <div class="icon-box">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h3 class="meaning-title">Ân Tình Sâu Đậm</h3>
+                <p class="meaning-desc">
+                    Dù thời gian có trôi qua, mái tóc thầy cô có bạc màu vì bụi phấn, thì tình thầy trò vẫn mãi khắc ghi sâu đậm trong tim.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wish Wall Section (Pure Wishes Grid, No Form) -->
+    <section id="wish-wall" class="section-padding wish-wall-bg">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Bức Tường Tri Ân</h2>
+                <p class="section-subtitle">Những thông điệp yêu thương và lòng biết ơn chân thành gửi đến Người Gieo Chữ</p>
+                <div class="divider-gold"></div>
+            </div>
+
+            <!-- Wish Grid Container -->
+            <div id="wishes-container" class="wish-grid">
+                <!-- Wishes will be injected by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D Interactive Flip Cards Section -->
+    <section id="cards" class="section-padding container">
+        <div class="section-header">
+            <h2 class="section-title">Thiệp Tri Ân 3D Tương Tác</h2>
+            <p class="section-subtitle">Nhấn vào thiệp để xem câu chúc ý nghĩa dành tặng thầy cô</p>
+        </div>
+
+        <div class="grid-3">
+            <!-- Card 1 -->
+            <div class="perspective-1000" onclick="flipCard(this)">
+                <div class="card-inner">
+                    <div class="card-front card-front-1">
+                        <div class="card-icon"><i class="fas fa-envelope"></i></div>
+                        <h3 class="card-title">Thiệp Nắng Thu</h3>
+                        <p class="card-hint">Chạm vào đây để mở thiệp <i class="fas fa-sync-alt"></i></p>
+                    </div>
+                    <div class="card-back">
+                        <span class="card-back-tag">Lời chúc 01</span>
+                        <p class="card-back-text">
+                            "Nhân ngày 20/11, xin kính chúc Thầy Cô luôn mạnh khỏe, hạnh phúc và tràn đầy nhiệt huyết để tiếp tục dìu dắt các thế hệ học trò cập bến tri thức!"
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="perspective-1000" onclick="flipCard(this)">
+                <div class="card-inner">
+                    <div class="card-front card-front-2">
+                        <div class="card-icon"><i class="fas fa-award"></i></div>
+                        <h3 class="card-title">Thiệp Bụi Phấn</h3>
+                        <p class="card-hint">Chạm vào đây để mở thiệp <i class="fas fa-sync-alt"></i></p>
+                    </div>
+                    <div class="card-back">
+                        <span class="card-back-tag">Lời chúc 02</span>
+                        <p class="card-back-text">
+                            "Dưới ánh sáng mặt trời, không có nghề nào cao quý hơn nghề dạy học. Cảm ơn Thầy Cô vì những hy sinh thầm lặng và tình yêu thương bao la."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="perspective-1000" onclick="flipCard(this)">
+                <div class="card-inner">
+                    <div class="card-front card-front-3">
+                        <div class="card-icon"><i class="fas fa-heart"></i></div>
+                        <h3 class="card-title">Thiệp Khát Vọng</h3>
+                        <p class="card-hint">Chạm vào đây để mở thiệp <i class="fas fa-sync-alt"></i></p>
+                    </div>
+                    <div class="card-back">
+                        <span class="card-back-tag">Lời chúc 03</span>
+                        <p class="card-back-text">
+                            "Ơn dạy dỗ cao như núi, nghĩa thầy cô sâu tựa biển khơi. Kính chúc Thầy Cô một ngày 20/11 thật trọn vẹn niềm vui và hạnh phúc!"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Poem Tri An Section (Without Images) -->
+    <section id="memories" class="section-padding container">
+        <div class="section-header">
+            <h2 class="section-title">Vần Thơ Tri Ân</h2>
+            <p class="section-subtitle">Những giai điệu và câu thơ xúc động dưới mái trường thân yêu</p>
+        </div>
+
+        <div class="poem-wrapper">
+            <div class="glass-panel poem-panel">
+                <i class="fas fa-feather-alt poem-watermark poem-watermark-right"></i>
+                <i class="fas fa-book-open poem-watermark poem-watermark-left"></i>
+                
+                <h3 class="poem-title">Bụi Phấn Rơi</h3>
+                <div class="poem-body">
+                    <p>"Khi thầy viết bảng<br>Bụi phấn rơi rơi<br>Có hạt bụi nào<br>Rơi trên bục giảng..."</p>
+                    <p>"Có hạt bụi nào<br>Vương trên tóc thầy<br>Em yêu phút giây này<br>Thầy em tóc như bạc thêm..."</p>
+                    <p>"Yêu thầy em hát bài ca<br>Gửi gắm ước mơ tuổi hồng..."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-title">Kính Chúc Thầy Cô Luôn Vững Tay Chèo Trên Con Đường Tri Thức</p>
+            <p>© 20/11 - Ngày Nhà Giáo Việt Nam</p>
+        </div>
+    </footer>
+
+    <script>
+        // Pure Wishes Array
+        const wishesData = [
+            "Nhân ngày 20/11, xin gửi lời cảm ơn sâu sắc nhất tới thầy cô. Dù thời gian có trôi qua, những bài học làm người của thầy cô vẫn luôn là hành trang quý giá nhất theo chúng em suốt cuộc đời!",
+            "Chúc cô giáo kính yêu luôn luôn mạnh khỏe, tràn đầy cảm xúc và giữ trọn ngọn lửa nhiệt huyết để tiếp tục gieo những mầm xanh tri thức cho đời.",
+            "Kính chúc toàn thể thầy cô giáo trên mọi miền Tổ quốc thật nhiều sức khỏe, hạnh phúc và luôn thành công trên con đường trồng người cao quý!",
+            "Ơn dạy dỗ cao như núi, nghĩa thầy cô sâu tựa biển khơi. Cảm ơn thầy cô đã luôn kiên nhẫn, dìu dắt và bao dung cho từng bước trưởng thành của chúng em.",
+            "Bụi phấn rơi trên bục giảng năm nào đã dệt nên tương lai cho bao thế hệ học trò. Xin kính chúc thầy cô một ngày 20/11 thật trọn vẹn niềm vui và ngập tràn tình yêu thương!",
+            "Mái trường xưa vẫn đón từng cơn gió thu, dáng thầy cô vẫn ân cần bên trang giáo án. Xin tri ân những hy sinh thầm lặng mà vĩ đại của người thầy!"
+        ];
+
+        // Render Wishes Grid
+        function renderWishes() {
+            const container = document.getElementById('wishes-container');
+            container.innerHTML = '';
+
+            wishesData.forEach(msg => {
+                const card = document.createElement('div');
+                card.className = 'wish-card';
+                card.innerHTML = `
+                    <div class="wish-quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <p class="wish-text">${escapeHtml(msg)}</p>
+                    <div class="wish-footer">
+                        <span class="wish-footer-tag">
+                            <i class="fas fa-heart heart-icon"></i> Tri Ân Thầy Cô
+                        </span>
+                        <span>20/11</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.innerText = text;
+            return div.innerHTML;
+        }
+
+        // Confetti Effect
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#D4AF37', '#B22222', '#FFFDD0']
+                });
+            }
+        }
+
+        // Flip 3D Card
+        function flipCard(cardWrapper) {
+            const inner = cardWrapper.querySelector('.card-inner');
+            inner.classList.toggle('rotate-y-180');
+        }
+
+        // Falling Petals Canvas Animation
+        const canvas = document.getElementById('petal-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const petals = [];
+        const petalColors = ['rgba(212, 175, 55, 0.6)', 'rgba(178, 34, 34, 0.5)', 'rgba(255, 235, 180, 0.5)'];
+
+        class Petal {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -20;
+                this.size = Math.random() * 8 + 4;
+                this.speedY = Math.random() * 1.5 + 0.8;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.color = petalColors[Math.floor(Math.random() * petalColors.length)];
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 2 - 1;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX + Math.sin(this.y / 30) * 0.5;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > canvas.height + 20) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 40; i++) {
+            petals.push(new Petal());
+        }
+
+        function animatePetals() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            petals.forEach(petal => {
+                petal.update();
+                petal.draw();
+            });
+            requestAnimationFrame(animatePetals);
+        }
+
+        // Reliable YouTube Player Toggle Logic
+        let isMusicPlaying = false;
+        const audioBtn = document.getElementById('audio-toggle');
+        const audioDisc = document.getElementById('audio-disc');
+        const audioText = document.getElementById('audio-text');
+        const playerWrapper = document.getElementById('player-wrapper');
+        const musicTip = document.getElementById('music-tip');
+        const ytIframe = document.getElementById('yt-iframe');
+
+        audioBtn.addEventListener('click', () => {
+            isMusicPlaying = !isMusicPlaying;
+
+            if (isMusicPlaying) {
+                // Load video with autoplay=1 on click interaction
+                ytIframe.src = "https://www.youtube.com/embed/Zm3dj0SKgfo?autoplay=1&rel=0&enablejsapi=1";
+                playerWrapper.classList.add('active');
+                audioDisc.classList.add('disc-spinning');
+                audioText.innerText = "Thu Nhỏ Trình Phát";
+                if (musicTip) musicTip.style.display = 'none';
+            } else {
+                ytIframe.src = "https://www.youtube.com/embed/Zm3dj0SKgfo?autoplay=0&rel=0&enablejsapi=1";
+                playerWrapper.classList.remove('active');
+                audioDisc.classList.remove('disc-spinning');
+                audioText.innerText = "Bật Nhạc Tri Ân";
+            }
+        });
+
+        // Initialize Page
+        window.onload = function() {
+            renderWishes();
+            animatePetals();
+        };
+    </script>
+</body>
+</html>
